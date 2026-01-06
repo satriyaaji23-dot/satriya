@@ -16,6 +16,24 @@ export function AdminPanel() {
 
     const pendingBookings = bookings.filter(b => b.status === "Menunggu")
 
+    const safeRenderAlat = (alat: any) => {
+        if (!alat) return '-'
+        if (Array.isArray(alat)) return alat.join(', ')
+        if (typeof alat === 'string') {
+            if (alat.startsWith('[')) {
+                try {
+                    const parsed = JSON.parse(alat)
+                    return Array.isArray(parsed) ? parsed.join(', ') : parsed
+                } catch {
+                    return alat
+                }
+            }
+            return alat
+        }
+        return '-'
+    }
+
+
     const handleRejectClick = (id: string) => {
         setRejectId(id)
         setRejectReason("")
@@ -59,22 +77,20 @@ export function AdminPanel() {
                                     </div>
                                     {booking.tipePeminjam === "ukm" && (
                                         <div>
-                                            <span className="font-medium">Asal UKM:</span> <span className="font-medium text-blue-600">{booking.organisasi}</span>
+                                            <span className="font-medium">Asal UKM:</span> {booking.organisasi}
                                         </div>
                                     )}
                                     {booking.tipePeminjam === "ormawa" && (
                                         <div>
-                                            <span className="font-medium">Asal Himpunan:</span> <span className="font-medium text-blue-600">{booking.organisasi}</span>
+                                            <span className="font-medium">Asal Himpunan:</span> {booking.organisasi}
                                         </div>
                                     )}
                                     <div>
                                         <span className="font-medium">Keperluan:</span> {booking.details.keperluan}
                                     </div>
-                                    {booking.details.alat.length > 0 && (
-                                        <div>
-                                            <span className="font-medium">Alat:</span> {booking.details.alat.join(", ")}
-                                        </div>
-                                    )}
+                                    <div>
+                                        <span className="font-medium">Alat:</span> {safeRenderAlat(booking.details.alat)}
+                                    </div>
                                     {booking.details.kakFile && (
                                         <div>
                                             <span className="font-medium">File KAK:</span> {booking.details.kakFile}

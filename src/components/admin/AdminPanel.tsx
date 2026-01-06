@@ -18,21 +18,23 @@ export function AdminPanel() {
 
     const safeRenderAlat = (alat: any) => {
         if (!alat) return '-'
+
         if (Array.isArray(alat)) return alat.join(', ')
+
         if (typeof alat === 'string') {
             if (alat.startsWith('[')) {
                 try {
                     const parsed = JSON.parse(alat)
                     return Array.isArray(parsed) ? parsed.join(', ') : parsed
                 } catch {
-                    return alat
+                    return alat 
                 }
             }
             return alat
         }
+
         return '-'
     }
-
 
     const handleRejectClick = (id: string) => {
         setRejectId(id)
@@ -49,6 +51,7 @@ export function AdminPanel() {
     return (
         <div className="space-y-4">
             <h2 className="text-xl font-semibold">Daftar Persetujuan Peminjaman</h2>
+
             {pendingBookings.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground bg-slate-50 rounded-lg border border-dashed">
                     Tidak ada permintaan peminjaman yang menunggu persetujuan.
@@ -75,6 +78,7 @@ export function AdminPanel() {
                                     <div>
                                         <span className="font-medium">Peminjam:</span> {booking.user}
                                     </div>
+
                                     {booking.tipePeminjam === "ukm" && (
                                         <div>
                                             <span className="font-medium">Asal UKM:</span> {booking.organisasi}
@@ -85,12 +89,16 @@ export function AdminPanel() {
                                             <span className="font-medium">Asal Himpunan:</span> {booking.organisasi}
                                         </div>
                                     )}
+
                                     <div>
                                         <span className="font-medium">Keperluan:</span> {booking.details.keperluan}
                                     </div>
+
+                                    {/* DISINI PENGAMANNYA DIPANGGIL */}
                                     <div>
                                         <span className="font-medium">Alat:</span> {safeRenderAlat(booking.details.alat)}
                                     </div>
+
                                     {booking.details.kakFile && (
                                         <div>
                                             <span className="font-medium">File KAK:</span> {booking.details.kakFile}
@@ -133,7 +141,7 @@ export function AdminPanel() {
                             <Label htmlFor="reason">Alasan</Label>
                             <Textarea
                                 id="reason"
-                                placeholder="Contoh: Ruangan sedang direnovasi, Jadwal bentrok dengan kegiatan fakultas, dll."
+                                placeholder="Contoh: Ruangan sedang direnovasi, Jadwal bentrok..."
                                 value={rejectReason}
                                 onChange={(e) => setRejectReason(e.target.value)}
                             />
